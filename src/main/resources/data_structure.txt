@@ -1,0 +1,15 @@
+create_namespace 'phr'
+
+disable 'phr:organisation'
+disable 'phr:person'
+disable 'phr:resource' 
+
+drop 'phr:organisation'
+drop 'phr:person'
+drop 'phr:resource' 
+
+create 'phr:organisation', 'id'
+create 'phr:person', 'id'
+create 'phr:resource', 'id' 
+
+-- scan 'phr:organisation'
