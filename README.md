@@ -33,7 +33,7 @@ vagrant@vagrant-hbase:~/hbase/bin$ ./stop-hbase.sh
 vagrant@vagrant-hbase:~/hbase/bin$ ./start-hbase.sh
 
 1.2.4 Configuration changes
-In directory '~/hbase/bin' edit file 'hbase-site.xml'
+In directory '~/hbase/conf' edit file 'hbase-site.xml'
 
 change from:
     <property>
