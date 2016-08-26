@@ -54,13 +54,13 @@ to:
 vagrant@vagrant-hbase:~/hbase/bin$ ./hbase shell
 
 ### 1.2.5.1 Create datastructures
-phr-poc/src/main/resources/data_structures.txt
-Initial:
-create_namespace 'phr'
+phr-poc/src/main/resources/data_structures.txt  
+Initial:  
+create_namespace 'phr'  
 
-create 'phr:organisation', 'id'
-create 'phr:person', 'id'
-create 'phr:resource', 'id' 
+create 'phr:organisation', 'id'  
+create 'phr:person', 'id'  
+create 'phr:resource', 'id'   
 
 ## 1.3 Testing connection
 ### 1.3.1 You shuld see response from:
