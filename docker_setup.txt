@@ -1,0 +1,33 @@
+Dockeri setup guide for Windows 7 pc
+
+1. Download Docker Toolbox
+https://www.docker.com/products/docker-toolbox
+
+2. install Docker and Kitematic. If not installed then install VirtualBoxi and Git also.
+3. Start Kitematic and install image with command:
+docker run -p 2181:2181 -p 60010:60010 -p 60000:60000 -p 60020:60020 -p 60030:60030 -p 8080:8080 -p 8085:8085 nerdammer/hbase
+
+4. in CMD window execute command: @FOR /f "tokens=*" %i IN ('docker-machine env default') DO @%i
+	Find running container ID with command: docker ps
+	Find value in column "CONTAINER ID" and add it to hosts file like that: 192.168.99.100 <container id>
+	Open Docker virtual environment with command: docker exec -it <container id> bash
+	Start Hbase shell: ./hbase shell
+	Create data structure with commands:
+	create_namespace 'phr'
+	create 'phr:organisation', 'id'
+	create 'phr:person', 'id'
+	create 'phr:resource', 'id'
+
+	Ctrl+C exits shell. Command 'exit' exits virtualenvironment.
+
+5. To verify that setup works start test TestPersonService in project phr_poc
+
+
+CMD commands:
+docker-machine start default 									- starts Docker
+docker-machine env default	 									- environment setup
+@FOR /f "tokens=*" %i IN ('docker-machine env default') DO @%i	- shell configuration
+docker ps														- running containers
+docker ps -a													- all containers
+docker exec -it <container id> bash								- cli access
+docker stop <container id>										- stop container
