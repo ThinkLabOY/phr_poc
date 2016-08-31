@@ -7,7 +7,7 @@ import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.ConnectionFactory;
 import org.apache.log4j.Logger;
-import org.ech.phr.service.impl.PersonDataIndexImpl;
+import org.ech.phr.model.exception.BusinessException;
 
 public class HbaseUtil {
 
@@ -19,15 +19,16 @@ public class HbaseUtil {
 		return conf;
 	}
 
-	public static Connection getHbaseConnection() {
+	public static Connection getHbaseConnection() throws BusinessException {
 		Connection connection = null;
 		try {
 			connection = ConnectionFactory.createConnection(getConf());
 		} 
 		catch (IOException e) {
-			log.error("getHbaseConnection IOException", e);
+			BusinessException.throwBusinessException(BusinessException.EX_HBS_001, e);
 		}
 		return connection;
 	}
-	
+
+
 }

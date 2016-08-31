@@ -4,7 +4,6 @@ import org.ech.phr.model.generic.JsonDto;
 
 public class Resource extends JsonDto {
 	
-	private Organisation organisation;
 	private Type type;
 	
 	private String resourceId;
@@ -14,9 +13,8 @@ public class Resource extends JsonDto {
 		super();
 	}	
 
-	public Resource(Organisation organisation, Type type, String resourceId, String resourceIdOid) {
+	public Resource(Type type, String resourceId, String resourceIdOid) {
 		super();
-		this.organisation = organisation;
 		this.type = type;
 		this.resourceId = resourceId;
 		this.resourceIdOid = resourceIdOid;
@@ -40,14 +38,5 @@ public class Resource extends JsonDto {
 	public void setType(Type type) {
 		this.type = type;
 	}
-
-	public Organisation getOrganisation() {
-		return organisation;
-	}
-
-	public void setOrganisation(Organisation organisation) {
-		this.organisation = organisation;
-	}
-
 
 }

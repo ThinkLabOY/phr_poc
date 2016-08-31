@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.hadoop.hbase.TableName;
 import org.ech.phr.hbase.dto.ValueProvider;
+import org.ech.phr.model.exception.BusinessException;
 import org.ech.phr.util.StringUtil;
 
 public class HbaseTable {
@@ -24,28 +25,37 @@ public class HbaseTable {
 		return column;
 	}
 
-	public <V extends ValueProvider> HbaseRecord<V> createRecord(HbaseColumn<V> column, String rowId) {
+	public <V extends ValueProvider> HbaseRecord<V> createRecord(HbaseColumn<V> column, String rowId) throws BusinessException {
 		byte[] rowIdBytes =  StringUtil.getBytes(rowId);
 		HbaseRecord<V> record = new HbaseRecord<V>(this, column, rowIdBytes);
 		return record;
 	}
 	
-	public <V extends ValueProvider> HbaseRecord<V> createRecord(HbaseColumn<V> column, String columnQualifier, String rowId) {
-		byte[] columnQualifierBytes =  StringUtil.getBytes(columnQualifier);
+	public <V extends ValueProvider> HbaseRecord<V> createRecord(HbaseColumn<V> column, String columnQualifier, String rowId) throws BusinessException {
+		byte[] columnQualifierBytes =  null;
+		if (columnQualifier != null && columnQualifier.length() > 0) {
+			columnQualifierBytes =  StringUtil.getBytes(columnQualifier);
+		}
 		byte[] rowIdBytes =  StringUtil.getBytes(rowId);
 		HbaseRecord<V> record = new HbaseRecord<V>(this, column, columnQualifierBytes, rowIdBytes);
 		return record;
 	}
 	
-	public <V extends ValueProvider> HbaseRecord<V> createRecord(HbaseColumn<V> column, String columnQualifier, String rowId, V value) {
-		byte[] columnQualifierBytes =  StringUtil.getBytes(columnQualifier);
+	public <V extends ValueProvider> HbaseRecord<V> createRecord(HbaseColumn<V> column, String columnQualifier, String rowId, V value) throws BusinessException {
+		byte[] columnQualifierBytes =  null;
+		if (columnQualifier != null && columnQualifier.length() > 0) {
+			columnQualifierBytes =  StringUtil.getBytes(columnQualifier);
+		}
 		byte[] rowIdBytes =  StringUtil.getBytes(rowId);
 		HbaseRecord<V> record = new HbaseRecord<V>(this, column, columnQualifierBytes, rowIdBytes, value);
 		return record;
 	}
 	
-	public <V extends ValueProvider> HbaseRecord<V> createRecord(HbaseColumn<V> column, String columnQualifier, String rowId, List<V> values) {
-		byte[] columnQualifierBytes =  StringUtil.getBytes(columnQualifier);
+	public <V extends ValueProvider> HbaseRecord<V> createRecord(HbaseColumn<V> column, String columnQualifier, String rowId, List<V> values) throws BusinessException {
+		byte[] columnQualifierBytes =  null;
+		if (columnQualifier != null && columnQualifier.length() > 0) {
+			columnQualifierBytes =  StringUtil.getBytes(columnQualifier);
+		}
 		byte[] rowIdBytes =  StringUtil.getBytes(rowId);
 		HbaseRecord<V> record = new HbaseRecord<V>(this, column, columnQualifierBytes, rowIdBytes, values);
 		return record;

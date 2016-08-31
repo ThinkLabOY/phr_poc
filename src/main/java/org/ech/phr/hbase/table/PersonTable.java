@@ -6,6 +6,7 @@ import org.ech.phr.hbase.table.generic.HbaseColumn;
 import org.ech.phr.hbase.table.generic.HbaseRecord;
 import org.ech.phr.hbase.table.generic.HbaseTable;
 import org.ech.phr.model.Person;
+import org.ech.phr.model.exception.BusinessException;
 
 public class PersonTable extends HbaseTable {
 	
@@ -18,19 +19,19 @@ public class PersonTable extends HbaseTable {
 		super(name);
 	}
 	
-	public static HbaseRecord<Person> createIdRecord(String rowId) {
+	public static HbaseRecord<Person> createIdRecord(String rowId) throws BusinessException {
 		return PERSON_TABLE.createRecord(ID, rowId);
 	}
 
-	public static HbaseRecord<Person> createIdRecord(String columnQualifier, String rowId) {
+	public static HbaseRecord<Person> createIdRecord(String columnQualifier, String rowId) throws BusinessException {
 		return PERSON_TABLE.createRecord(ID, columnQualifier, rowId);
 	}
 
-	public static HbaseRecord<Person> createIdRecord(String columnQualifier, String rowId, Person person) {
+	public static HbaseRecord<Person> createIdRecord(String columnQualifier, String rowId, Person person) throws BusinessException {
 		return PERSON_TABLE.createRecord(ID, columnQualifier, rowId, person);
 	}
 
-	public static HbaseRecord<Person> createIdRecord(String columnQualifier, String rowId, List<Person> persons) {
+	public static HbaseRecord<Person> createIdRecord(String columnQualifier, String rowId, List<Person> persons) throws BusinessException {
 		return PERSON_TABLE.createRecord(ID, columnQualifier, rowId, persons);
 	}
 

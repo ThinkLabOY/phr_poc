@@ -16,23 +16,23 @@ public class TestData {
 	}
 	
 	public static Resource getResourceOne() {
-		return new Resource(getDataProviderOne(), getTypeOne(), "resource1", "rOid");
+		return new Resource(getTypeOne(), "resource1", "rOid");
 	}
 
 	public static Resource getResourceTwo() {
-		return new Resource(getDataProviderTwo(), getTypeOne(), "resource2", "rOid");
+		return new Resource(getTypeOne(), "resource2", "rOid");
 	}
 
 	public static Resource getResourceThree() {
-		return new Resource(getDataProviderThree(), getTypeTwo(), "resource3", "rOid");
+		return new Resource(getTypeTwo(), "resource3", "rOid");
 	}
 
 	public static Resource getResourceFour() {
-		return new Resource(getDataProviderOne(), getTypeOne(), "resource4", "rOid");
+		return new Resource(getTypeOne(), "resource4", "rOid");
 	}
 
 	public static Resource getResourceFive() {
-		return new Resource(getDataProviderTwo(), getTypeTwo(), "resource5", "rOid");
+		return new Resource(getTypeTwo(), "resource5", "rOid");
 	}
 	
 	public static Organisation getDataProviderOne() {

@@ -1,12 +1,11 @@
 package org.ech.phr.service;
 
-import java.io.IOException;
-
 import org.ech.phr.model.Person;
+import org.ech.phr.model.exception.BusinessException;
 
 public interface PersonService {
 
-	public Person findPerson(String id, String idOid, String organisationHashId) throws IOException;	
-	public Person findOrInsertPerson(String id, String idOid, String organisationHashId) throws IOException;
+	public Person findPerson(String id, String idOid, String organisationId, String organisationIdOid) throws BusinessException;
+	public Person findOrInsertPerson(String id, String idOid, String organisationId, String organisationIdOid) throws BusinessException;
 	
 }

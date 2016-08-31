@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.apache.log4j.Logger;
 import org.ech.phr.hbase.dto.ValueProvider;
+import org.ech.phr.model.exception.BusinessException;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -16,47 +17,47 @@ public class JsonDto extends MapperDto {
 
 	private ObjectMapper mapper = new ObjectMapper();
 	
-	public byte[] toValue() {
+	public byte[] toValue() throws BusinessException {
 		byte[] valueAsBytes = null;
 		try {
 			valueAsBytes = mapper.writeValueAsBytes(this);
 		} 
 		catch (JsonProcessingException e) {
-			log.error("JsonProcessingException toValue", e);
+			BusinessException.throwBusinessException(BusinessException.EX_JSN_001, e);
 		}
 		return valueAsBytes;
 	}
 
-	public void fromValue(byte[] valueAsBytes) {
+	public void fromValue(byte[] valueAsBytes) throws BusinessException {
 		try {
 			JsonDto valueAsObject = mapper.readValue(valueAsBytes, this.getClass());
 			this.mapFrom(valueAsObject);
 		} 
 		catch (JsonParseException e) {
-			log.error("JsonParseException fromValue", e);
+			BusinessException.throwBusinessException(BusinessException.EX_JSN_001, e);
 		} 
 		catch (JsonMappingException e) {
-			log.error("JsonMappingException fromValue", e);
+			BusinessException.throwBusinessException(BusinessException.EX_JSN_002, e);
 		} 
 		catch (IOException e) {
-			log.error("IOException fromValue", e);
+			BusinessException.throwBusinessException(BusinessException.EX_JSN_003, e);
 		}
 	}
 	
-	public static <V extends ValueProvider> V create(byte[] valueAsBytes, Class<V> valueClass) {
+	public static <V extends ValueProvider> V create(byte[] valueAsBytes, Class<V> valueClass) throws BusinessException {
 		V valueAsObject = null;
 		try {
 			ObjectMapper mapperI = new ObjectMapper();
 			valueAsObject = mapperI.readValue(valueAsBytes, valueClass);
 		} 
 		catch (JsonParseException e) {
-			log.error("JsonParseException fromValue", e);
+			BusinessException.throwBusinessException(BusinessException.EX_JSN_002, e);
 		} 
 		catch (JsonMappingException e) {
-			log.error("JsonMappingException fromValue", e);
+			BusinessException.throwBusinessException(BusinessException.EX_JSN_003, e);
 		} 
 		catch (IOException e) {
-			log.error("IOException fromValue", e);
+			BusinessException.throwBusinessException(BusinessException.EX_JSN_004, e);
 		}
 		return valueAsObject;
 	}
@@ -68,7 +69,7 @@ public class JsonDto extends MapperDto {
 			valueAsString = mapper.writeValueAsString(this);
 		} 
 		catch (JsonProcessingException e) {
-			log.error("JsonProcessingException toString", e);
+			BusinessException.logException(BusinessException.EX_JSN_001, e);
 		}
 		return valueAsString;
 	}

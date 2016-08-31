@@ -12,6 +12,7 @@ import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.Table;
 import org.ech.phr.hbase.dto.ValueProvider;
+import org.ech.phr.model.exception.BusinessException;
 import org.ech.phr.model.generic.JsonDto;
 import org.ech.phr.util.RequestContext;
 import org.ech.phr.util.SpringUtil;
@@ -100,7 +101,7 @@ public class HbaseRecord <V extends ValueProvider> {
 		return SpringUtil.getBean(RequestContext.class);
 	}
 
-	public HbaseRecord<V> put() throws IOException {
+	public HbaseRecord<V> put() throws BusinessException {
 		Connection connection = getRequestContext().getConnection();
 		Table tableHbase = null;
 		try {
@@ -110,15 +111,23 @@ public class HbaseRecord <V extends ValueProvider> {
 			put.add(this.getColumn().getColumnNameValue(), getColumnQualifier(), getValue().toValue());
 			tableHbase.put(put);
 		}
+		catch (IOException ioe) {
+			BusinessException.throwBusinessException(BusinessException.EX_HBS_001, ioe);
+		}
 		finally {
 			if (tableHbase != null) { 
-				tableHbase.close();
+				try {
+					tableHbase.close();
+				}
+				catch (IOException ioe) {
+					BusinessException.throwBusinessException(BusinessException.EX_HBS_001, ioe);
+				}
 			}
 		}
 		return this;
 	}
 
-	public HbaseRecord<V> get() throws IOException {
+	public HbaseRecord<V> get() throws BusinessException {
 		Connection connection = getRequestContext().getConnection();
 		Table tableHbase = null;
 		try {
@@ -150,9 +159,17 @@ public class HbaseRecord <V extends ValueProvider> {
 				}
 			}
 		}
+		catch (IOException ioe) {
+			BusinessException.throwBusinessException(BusinessException.EX_HBS_001, ioe);
+		}
 		finally {
 			if (tableHbase != null) { 
-				tableHbase.close();
+				try {
+					tableHbase.close();
+				}
+				catch (IOException ioe) {
+					BusinessException.throwBusinessException(BusinessException.EX_HBS_001, ioe);
+				}
 			}
 		}
 		return this;
