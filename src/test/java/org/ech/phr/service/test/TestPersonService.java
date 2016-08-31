@@ -1,5 +1,6 @@
 package org.ech.phr.service.test;
 
+import lombok.extern.slf4j.Slf4j;
 import org.ech.phr.model.Person;
 import org.ech.phr.model.exception.BusinessException;
 import org.ech.phr.service.PersonService;
@@ -12,6 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+@Slf4j
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"/spring-test-config.xml"})
 @WebAppConfiguration
