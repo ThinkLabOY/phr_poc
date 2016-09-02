@@ -20,7 +20,10 @@ docker run -p 2181:2181 -p 60010:60010 -p 60000:60000 -p 60020:60020 -p 60030:60
 
 	Ctrl+C exits shell. Command 'exit' exits virtualenvironment.
 
-5. To verify that setup works start test TestPersonService in project phr_poc
+5. In Application class set winutils location ("System.setProperty("hadoop.home.dir", "C:\\...\\phr_poc\\winutils");")
+6. In HbaseUtil set "conf.set("hbase.zookeeper.quorum", "192.168.99.100");" to set right ip for zookeeper
+7. Start Spring-boot application with command: mvn spring-boot:run 
+8. To verify that setup works start test TestPersonService in project phr_poc
 
 
 CMD commands:

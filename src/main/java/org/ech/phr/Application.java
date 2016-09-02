@@ -10,6 +10,8 @@ import org.springframework.context.ApplicationContext;
 public class Application {
 	
     public static void main(String[] args) {
+        
+        //System.setProperty("hadoop.home.dir", "C:\\...\\phr_poc\\winutils");
         ApplicationContext ctx = SpringApplication.run(Application.class, args);
         
     }
