@@ -2,20 +2,23 @@ package org.ech.phr.util;
 
 import java.io.IOException;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.ConnectionFactory;
-import org.apache.log4j.Logger;
 import org.ech.phr.model.exception.BusinessException;
 
+@Slf4j
 public class HbaseUtil {
-
-	final static Logger log = Logger.getLogger(HbaseUtil.class);
 
 	private static Configuration getConf() {
 		Configuration conf = HBaseConfiguration.create();
 		conf.set("hbase.zookeeper.quorum", "192.168.15.166");
+//		conf.set("hbase.zookeeper.quorum", "192.168.99.100"); // Docker ip
+//		conf.set("hbase.client.retries.number", Integer.toString(1));
+//		conf.set("zookeeper.session.timeout", Integer.toString(60000));
+//		conf.set("zookeeper.recovery.retry", Integer.toString(1));
 		return conf;
 	}
 
@@ -23,7 +26,7 @@ public class HbaseUtil {
 		Connection connection = null;
 		try {
 			connection = ConnectionFactory.createConnection(getConf());
-		} 
+		}
 		catch (IOException e) {
 			BusinessException.throwBusinessException(BusinessException.EX_HBS_001, e);
 		}

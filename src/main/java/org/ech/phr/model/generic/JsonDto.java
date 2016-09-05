@@ -2,7 +2,7 @@ package org.ech.phr.model.generic;
 
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.ech.phr.hbase.dto.ValueProvider;
 import org.ech.phr.model.exception.BusinessException;
 
@@ -11,9 +11,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+@Slf4j
 public class JsonDto extends MapperDto {
-
-	final static Logger log = Logger.getLogger(JsonDto.class);
 
 	private ObjectMapper mapper = new ObjectMapper();
 	
@@ -21,7 +20,7 @@ public class JsonDto extends MapperDto {
 		byte[] valueAsBytes = null;
 		try {
 			valueAsBytes = mapper.writeValueAsBytes(this);
-		} 
+		}
 		catch (JsonProcessingException e) {
 			BusinessException.throwBusinessException(BusinessException.EX_JSN_001, e);
 		}
@@ -32,7 +31,7 @@ public class JsonDto extends MapperDto {
 		try {
 			JsonDto valueAsObject = mapper.readValue(valueAsBytes, this.getClass());
 			this.mapFrom(valueAsObject);
-		} 
+		}
 		catch (JsonParseException e) {
 			BusinessException.throwBusinessException(BusinessException.EX_JSN_001, e);
 		} 
@@ -49,7 +48,7 @@ public class JsonDto extends MapperDto {
 		try {
 			ObjectMapper mapperI = new ObjectMapper();
 			valueAsObject = mapperI.readValue(valueAsBytes, valueClass);
-		} 
+		}
 		catch (JsonParseException e) {
 			BusinessException.throwBusinessException(BusinessException.EX_JSN_002, e);
 		} 
@@ -61,13 +60,13 @@ public class JsonDto extends MapperDto {
 		}
 		return valueAsObject;
 	}
-	
+
 	@Override
 	public String toString() {
 		String valueAsString = null;
 		try {
 			valueAsString = mapper.writeValueAsString(this);
-		} 
+		}
 		catch (JsonProcessingException e) {
 			BusinessException.logException(BusinessException.EX_JSN_001, e);
 		}

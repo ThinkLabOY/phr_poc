@@ -2,17 +2,17 @@ package org.ech.phr.util;
 
 import java.io.IOException;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.hbase.client.Connection;
-import org.apache.log4j.Logger;
 import org.ech.phr.model.exception.BusinessException;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 @Scope("request")
 public class RequestContext {
-	
-	final static Logger log = Logger.getLogger(RequestContext.class);
+
 	private Connection connection;
 
 	private void initConnection() throws BusinessException  {

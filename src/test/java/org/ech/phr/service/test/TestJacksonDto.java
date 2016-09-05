@@ -1,18 +1,15 @@
 package org.ech.phr.service.test;
 
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.ech.phr.model.Person;
 import org.ech.phr.model.exception.BusinessException;
 import org.junit.Assert;
 import org.junit.Test;
 
-
-
+@Slf4j
 public class TestJacksonDto {
 
-	final static Logger log = Logger.getLogger(TestJacksonDto.class);
 
-	
     @Test
 	public void testToAndFromJson() {
     	Person person = TestData.getPersonOne();
