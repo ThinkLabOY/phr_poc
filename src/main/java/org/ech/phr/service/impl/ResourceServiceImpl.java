@@ -42,8 +42,8 @@ public class ResourceServiceImpl implements ResourceService {
 	public List<Resource> getResourceReferences(String personId, String personIdOid, String organisationId, String organisationIdOid, String typeCode, String typeCodeOid) throws BusinessException {
 		List<Resource> result = null;
 		Person person = personService.findPerson(personId, personIdOid, organisationId, organisationIdOid);
-		String personPhrIdFull = FhirUtil.composeId(person.getPhrId(), person.getPhrIdOid(), FhirUtil.TYPE_PATIENT);
 		if (person != null) {
+			String personPhrIdFull = FhirUtil.composeId(person.getPhrId(), person.getPhrIdOid(), FhirUtil.TYPE_PATIENT);
 			String typeIdFull = FhirUtil.composeId(typeCode, typeCodeOid, FhirUtil.TYPE_TYPE);
 			HbaseRecord<Resource> resourceRecord = ResourceTable.createIdRecord(typeIdFull, personPhrIdFull);
 			result = resourceRecord.get().getValues();
