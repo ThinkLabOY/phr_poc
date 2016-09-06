@@ -8,10 +8,11 @@ import org.ech.phr.service.OrganisationService;
 import org.ech.phr.util.FhirUtil;
 import org.ech.phr.util.StringUtil;
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 
 @Component
-@Scope("request")
+@Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class OrganisationServiceImpl implements OrganisationService {
 
 	public Organisation registerOrganisation(String organisationId, String organisationIdOid, String url) throws BusinessException {
