@@ -2,6 +2,6 @@ target
 .settings
 /.project
 /.classpath
-.idea/
+*.idea/
 *.iml
 hbase/.vagrant
