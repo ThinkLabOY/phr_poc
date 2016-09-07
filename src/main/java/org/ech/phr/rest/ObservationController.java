@@ -23,7 +23,7 @@ public class ObservationController {
 	private ResourceService resourceService;
 
 	@RequestMapping(method = RequestMethod.GET)
-	public void getObservations(@RequestParam(value = "patient.identifier.value", required = true) String patientIdentifierValue,
+	public List<Resource> getObservations(@RequestParam(value = "patient.identifier.value", required = true) String patientIdentifierValue,
 			@RequestParam(value = "patient.identifier.system", required = true) String patientIdentifierSystem,
 			@RequestParam(value = "organisation.identifier.value", required = true) String organisationIdentifierValue,
 			@RequestParam(value = "code.code", required = true) String codeCode, @RequestParam(value = "code.system", required = true) String codeSystem) {
@@ -38,12 +38,14 @@ public class ObservationController {
 		catch (BusinessException e) {
 			log.error("Error: {}", e.getStackTrace());
 		}
+		
+		// TODO: query other phr systems for resources
 
 		if (resources != null) {
 			resources.forEach(resource -> log
-					.debug("resource: " + resource.getResourceId() + " " + resource.getResourceIdOid() + " " + resource.getType().getTypeCode()));
+					.debug("resource - ResourceId: " + resource.getResourceId() + ", ResourceIdOid: " + resource.getResourceIdOid() + ", TypeCode: " + resource.getType().getTypeCode()));
 		}
-
+		return resources;
 	}
 	// Test url
 	// http://localhost:8080/fhir/Observation?patient.identifier.value=37804230234&patient.identifier.system=http://www.politsei.ee/&organisation.identifier.value=ORG1&code.code=3141-9&code.system=http://loinc.org
