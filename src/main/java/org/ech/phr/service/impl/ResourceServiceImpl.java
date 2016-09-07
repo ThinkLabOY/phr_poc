@@ -29,8 +29,8 @@ public class ResourceServiceImpl implements ResourceService {
 	public Resource putResourceReference(String personId, String personIdOid, String organisationId, String organisationIdOid, String typeCode, String typeCodeOid, String resourceId, String resourceIdOid) throws BusinessException {
 		Resource resource = null;
 		Person person = personService.findOrInsertPerson(personId, personIdOid, organisationId, organisationIdOid);
-		String personPhrIdFull = FhirUtil.composeId(person.getPhrId(), person.getPhrIdOid(), FhirUtil.TYPE_PATIENT);
 		if (person != null) {
+			String personPhrIdFull = FhirUtil.composeId(person.getPhrId(), person.getPhrIdOid(), FhirUtil.TYPE_PATIENT);
 			Type type = new Type(typeCode, typeCodeOid);
 			String typeIdFull = FhirUtil.composeId(typeCode, typeCodeOid, FhirUtil.TYPE_TYPE);
 		    resource = new Resource(type, resourceId, resourceIdOid);
