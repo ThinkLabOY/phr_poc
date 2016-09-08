@@ -1,3 +1,6 @@
 logging:
   level:
     org.ech.phr: DEBUG
+    
+# phr mock environment
+phrMockUrl1: http://localhost:9090

@@ -19,7 +19,7 @@ public class ObservationController {
 	public List<Resource> getMockObservations(@RequestParam(value = "patient.identifier.value", required = true) String patientIdentifierValue,
 			@RequestParam(value = "patient.identifier.system", required = true) String patientIdentifierSystem,
 			@RequestParam(value = "organisation.identifier.value", required = true) String organisationIdentifierValue,
-			@RequestParam(value = "code.code", required = true) String codeCode, @RequestParam(value = "code.system", required = true) String codeSystem) {
+			@RequestParam(value = "code.code") String codeCode, @RequestParam(value = "code.system") String codeSystem) {
 
 		log.debug("getObservations: " + patientIdentifierValue + " " + patientIdentifierSystem + " " + organisationIdentifierValue + " " + codeCode + " "
 				+ codeSystem);
