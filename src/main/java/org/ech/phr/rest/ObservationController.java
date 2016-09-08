@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.ech.phr.util.SystemProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
@@ -15,13 +14,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import lombok.extern.slf4j.Slf4j;
 import org.ech.phr.model.Resource;
 import org.ech.phr.model.exception.BusinessException;
 import org.ech.phr.service.ResourceService;
 import org.ech.phr.util.FhirUtil;
-import org.springframework.web.util.UriComponentsBuilder;
+import org.ech.phr.util.SystemProperties;
 
 @Slf4j
 @RestController
@@ -30,7 +30,7 @@ public class ObservationController {
 
 	@Autowired
 	private SystemProperties properties;
-	
+
 	@Autowired
 	private ResourceService resourceService;
 
@@ -55,13 +55,13 @@ public class ObservationController {
 		queryParams.set("patient.identifier.value", patientIdentifierValue);
 		queryParams.set("patient.identifier.system", patientIdentifierSystem);
 		queryParams.set("organisation.identifier.value", organisationIdentifierValue);
-		if(codeCode != null) {
+		if (codeCode != null) {
 			queryParams.set("code.code", codeCode);
 		}
-		if(codeSystem != null) {
+		if (codeSystem != null) {
 			queryParams.set("code.system", codeSystem);
 		}
-		
+
 		resources.addAll(queryOtherPhrSystems(queryParams));
 
 		resources.forEach(resource -> log.debug("resource - ResourceId: " + resource.getResourceId() + ", ResourceIdOid: " + resource.getResourceIdOid()
@@ -71,10 +71,10 @@ public class ObservationController {
 	}
 	// Test url
 	// http://localhost:8080/fhir/Observation?patient.identifier.value=37804230234&patient.identifier.system=http://www.politsei.ee/&organisation.identifier.value=ORG1&code.code=3141-9&code.system=http://loinc.org
-	
+
 	private List<Resource> queryOtherPhrSystems(MultiValueMap<String, String> queryParams) {
 		String phrMockUrl = properties.getPhrMockUrl1();
-		URI targetUrl= UriComponentsBuilder.fromUriString(phrMockUrl)
+		URI targetUrl = UriComponentsBuilder.fromUriString(phrMockUrl)
 				.path("/fhir/Observation")
 				.queryParams(queryParams)
 				.build()
