@@ -11,10 +11,11 @@ import org.ech.phr.util.FhirUtil;
 import org.ech.phr.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 
 @Component
-@Scope("request")
+@Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class PersonServiceImpl implements PersonService {
 	
 	@Autowired
