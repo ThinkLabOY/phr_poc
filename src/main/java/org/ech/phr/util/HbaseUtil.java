@@ -14,7 +14,8 @@ public class HbaseUtil {
 
 	private static Configuration getConf() {
 		Configuration conf = HBaseConfiguration.create();
-		conf.set("hbase.zookeeper.quorum", "192.168.15.166");
+		conf.set("hbase.zookeeper.quorum", "127.0.0.1");      // Local ip
+//		conf.set("hbase.zookeeper.quorum", "192.168.15.166"); // Vagrant ip
 //		conf.set("hbase.zookeeper.quorum", "192.168.99.100"); // Docker ip
 //		conf.set("hbase.client.retries.number", Integer.toString(1));
 //		conf.set("zookeeper.session.timeout", Integer.toString(60000));
