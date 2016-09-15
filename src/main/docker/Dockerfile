@@ -25,7 +25,7 @@ RUN /opt/hbase/bin/hbase-config.sh
 ADD hbase-site.xml /opt/hbase/conf/hbase-site.xml
 ADD start-pseudo-distributed.sh /opt/hbase/bin/start-pseudo-distributed.sh
 
-ADD startPhrBox.sh /opt/hbase/bin/startPhrBox.sh
+COPY startPhrBox.sh /opt/hbase/bin/startPhrBox.sh
 
 # zookeeper
 EXPOSE 2181
@@ -46,9 +46,9 @@ ENV PATH=$PATH:/opt/hbase/bin
 VOLUME /tmp
 ADD phr-0.0.1.jar /app.jar
 RUN sh -c 'touch /app.jar'
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
+#ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
 #ENTRYPOINT ["/opt/hbase/bin/startPhrBox.sh"]
 
 # start HBase
-#CMD /opt/hbase/bin/start-pseudo-distributed.sh
+CMD [ "/opt/hbase/bin/start-pseudo-distributed.sh" ]
 #CMD /opt/hbase/bin/startPhrBox.sh
