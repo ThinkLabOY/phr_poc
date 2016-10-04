@@ -1,5 +1,7 @@
 # Phr application on Docker
 
+### Activate Docker in Windows CMD 
+@FOR /f "tokens=*" %i IN ('docker-machine env default') DO @%i
 ### Docker image is upploaded to https://hub.docker.com/r/thinklaboy/phr/
 ### Image can be downloaded with command:  
 docker pull thinklaboy/phr:latest
