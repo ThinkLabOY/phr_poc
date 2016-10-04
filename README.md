@@ -20,6 +20,11 @@ http://192.168.99.100:8080/
 
 ### View running presesses on docker
 ps -eaf
+
+### Delete ... containers on windows
+docker ps -a | grep 'weeks ago' | awk '{print $1}' | xargs --no-run-if-empty docker rm
+
+
 ### Delete all containers
 docker rm $(docker ps -a -q)
 ### Delete all images
