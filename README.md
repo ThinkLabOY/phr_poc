@@ -1,71 +1,41 @@
-# 1. Vagrant hbase
+# Phr application on Docker
 
-- install vagrant http://www.vagrantup.com/
-- install oracle VM VirtualBox Manager http://www.oracle.com/technetwork/server-storage/virtualbox/downloads/index.html
-- install putty or some ssh client
+### Activate Docker in Windows CMD 
+@FOR /f "tokens=*" %i IN ('docker-machine env default') DO @%i
+### Docker image is upploaded to https://hub.docker.com/r/thinklaboy/phr/
+### Image can be downloaded with command:  
+docker pull thinklaboy/phr:latest
 
-## 1.1 In local project work directory 'phr-poc\hbase' run command 'vagrant up'
-If everything is ok, then you should see "hbase_defaul_..." Running in Oracle VM VirtualBox
+### Run image on container:  
+docker run -p 8080:8080 thinklaboy/phr:latest
 
-## 1.2 Putty ssh 127.0.0.1:2222
-vagrant/vagrant
+### Start project with local build:  
+docker run -v <path_to_project>/phr_poc/target/phr-0.0.1.jar:/app.jar -p 8080:8080 --rm thinklaboy/phr:latest 
 
-## 1.2.1 Check whether necessary Hadoopi and Hbase processes are running:
-vagrant@vagrant-hbase:~$ jps
-Hbase:  
-14525 HRegionServer  
-14393 HQuorumPeer  
-14446 HMaster  
-Hadoop:  
-13761 DataNode  
-13940 SecondaryNameNode  
-13641 NameNode  
+### on Windows:  
+docker run -v //c/Users/<path_to_project>/phr_poc/target/phr-0.0.1.jar:/app.jar -p 8080:8080 --rm thinklaboy/phr:latest 
 
-## 1.2.2 Stopping/starting Hadoop
-### 1.2.2.1 Stopping
-vagrant@vagrant-hbase:~/hadoop/sbin$ ./stop-dfs.sh
-### 1.2.2.2 Starting
-vagrant@vagrant-hbase:~/hadoop/sbin$ ./start-dfs.sh
+### To verify that Docker is working open address:
+http://192.168.99.100:8080/
 
-## 1.2.3 Stopping/starting Hbase 
-### 1.2.3.1 Stopping
-vagrant@vagrant-hbase:~/hbase/bin$ ./stop-hbase.sh
-### 1.2.3.1 Starting
-vagrant@vagrant-hbase:~/hbase/bin$ ./start-hbase.sh
 
-## 1.2.4 Configuration changes
-In directory '~/hbase/conf' edit file 'hbase-site.xml'
+## Commands:
 
-change from:
-```xml
-    <property>
-        <name>hbase.zookeeper.quorum</name>
-        <value>localhost</value>
-    </property>
-```
-to:
-```xml
-    <property>
-        <name>hbase.zookeeper.quorum</name>
-        <value>127.0.0.1</value>
-    </property>
-```
-## 1.2.5 Starting Hbase shell 
-vagrant@vagrant-hbase:~/hbase/bin$ ./hbase shell
-
-### 1.2.5.1 Create datastructures
-phr-poc/src/main/resources/data_structures.txt  
-Initial:  
-create_namespace 'phr'  
-
-create 'phr:organisation', 'id'  
-create 'phr:person', 'id'  
-create 'phr:resource', 'id'   
-
-## 1.3 Testing connection
-### 1.3.1 You shuld see response from:
-http://192.168.15.166:60010/master-status
-
-## 1.3.2 In IDE run TestPersonService as Junit test
-Test should end successfully (ignore exception java.io.IOException: Could not locate executable null\bin\winutils.exe in the Hadoop binaries.)
-
+### Show running containers
+docker ps
+### Show all containers
+docker ps -a	
+### Access container bash
+docker exec -it <container id> bash
+### Start/stop container  
+docker start/stop <container id>	
+### View running presesses on docker
+ps -eaf
+### Delete ... containers on windows
+docker ps -a | grep 'weeks ago' | awk '{print $1}' | xargs --no-run-if-empty docker rm
+### Delete all containers
+docker rm $(docker ps -a -q)
+### Delete all images
+docker rmi $(docker images -q)
+### Show logs
+docker logs <container_id> -f
