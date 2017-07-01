@@ -1,0 +1,1 @@
+docker run --name phr --network phr_ntwrk --ip 172.30.0.11 --rm -p 8081:8081 phr:1.0

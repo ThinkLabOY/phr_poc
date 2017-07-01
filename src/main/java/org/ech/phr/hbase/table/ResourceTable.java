@@ -2,6 +2,7 @@ package org.ech.phr.hbase.table;
 
 import java.util.List;
 
+import org.apache.hadoop.hbase.HTableDescriptor;
 import org.ech.phr.hbase.table.generic.HbaseColumn;
 import org.ech.phr.hbase.table.generic.HbaseRecord;
 import org.ech.phr.hbase.table.generic.HbaseTable;
@@ -14,6 +15,7 @@ public class ResourceTable extends HbaseTable {
 	
 	public static HbaseColumn<Resource> ID = createColumn("id", Resource.class);
 	public static ResourceTable RESOURCE_TABLE = new ResourceTable();
+	public static HTableDescriptor RESOURCE_TABLE_ID_DESCRITPOR = RESOURCE_TABLE.getDescriptorForColumn(ID);
 
 	public ResourceTable() {
 		super(name);

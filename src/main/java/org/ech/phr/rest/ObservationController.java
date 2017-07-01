@@ -48,7 +48,7 @@ public class ObservationController {
 					FhirUtil.OID_PHR, codeCode, codeSystem));
 		}
 		catch (BusinessException e) {
-			log.error("Error: {}", e.getStackTrace());
+			log.error("Error: {}", e.getErrorMessage());
 		}
 
 		MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();

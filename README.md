@@ -1,41 +1,50 @@
-# Phr application on Docker
+# Prerequisites:
 
-### Activate Docker in Windows CMD 
-@FOR /f "tokens=*" %i IN ('docker-machine env default') DO @%i
-### Docker image is upploaded to https://hub.docker.com/r/thinklaboy/phr/
-### Image can be downloaded with command:  
-docker pull thinklaboy/phr:latest
+1. Download and install Docker
+https://store.docker.com/search?type=edition&offering=community
+2. Download and install Java, Git, Maven
 
-### Run image on container:  
-docker run -p 8080:8080 thinklaboy/phr:latest
+# Environment setup:
 
-### Start project with local build:  
-docker run -v <path_to_project>/phr_poc/target/phr-0.0.1.jar:/app.jar -p 8080:8080 --rm thinklaboy/phr:latest 
+Run batches in the following order:
+1. phr_build.bat
+2. docker_build_hbase.bat
+3. docker_build_phr.bat
+4. docker_create_network.bat
+5. docker_run_hbase.bat (in a seperate command window)
+6. docker_run_phr.bat (in a seperate command window)
+7. create_data_structure.bat
 
-### on Windows:  
-docker run -v //c/Users/<path_to_project>/phr_poc/target/phr-0.0.1.jar:/app.jar -p 8080:8080 --rm thinklaboy/phr:latest 
+# Testing environment:
+Open swagger Ui for REST:
+http://localhost:8081/swagger-ui.html
 
-### To verify that Docker is working open address:
-http://192.168.99.100:8080/
+1. Registering organisation:
+	1. 
+http://localhost:8081/swagger-ui.html#!/organisation-controller/saveOrganisationUsingPOST
+{
+  "id": "ORG1",
+  "url": "localhost:8082"
+}
+	2.
+    http://localhost:8081/fhir/Organisation?organisation.identifier.value=ORG1
+Should return:
+    {"id":"ORG1","url":"localhost:8082"}
 
+2. Registering person:
+	1.
+http://localhost:8081/swagger-ui.html#!/person-controller/savePersonUsingPOST
+    {
+        "organisation": {
+        "id": "ORG1"
+      },
+      "personId": "1",
+      "personIdOid": "OID1"
+    }
+	2.
+    http://localhost:8081/fhir/Person?patient.identifier.value=1&patient.identifier.system=OID1&organisation.identifier.value=ORG1
+Should return:
+    {"personId":"1","personIdOid":"OID1","organisation":null}
 
-## Commands:
-
-### Show running containers
-docker ps
-### Show all containers
-docker ps -a	
-### Access container bash
-docker exec -it <container id> bash
-### Start/stop container  
-docker start/stop <container id>	
-### View running presesses on docker
-ps -eaf
-### Delete ... containers on windows
-docker ps -a | grep 'weeks ago' | awk '{print $1}' | xargs --no-run-if-empty docker rm
-### Delete all containers
-docker rm $(docker ps -a -q)
-### Delete all images
-docker rmi $(docker images -q)
-### Show logs
-docker logs <container_id> -f
+3. Performing Observation query:
+    http://localhost:8081/fhir/Observation?patient.identifier.value=1&patient.identifier.system=OID1&organisation.identifier.value=ORG1&code.code=3141-9&code.system=http%3A%2F%2Floinc.org

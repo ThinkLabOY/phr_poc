@@ -1,0 +1,1 @@
+hbase shell create_data_structure.txt

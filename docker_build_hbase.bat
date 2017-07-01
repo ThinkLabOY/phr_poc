@@ -1,0 +1,1 @@
+docker build -t hbase:1.0 ./docker_hbase

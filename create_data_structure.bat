@@ -1,0 +1,1 @@
+docker exec -it hbase sh -c /opt/hbase/bin/create_data_structure.sh && exit

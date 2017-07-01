@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.5.3.RELEASE</version>
+	</parent>
+
 	<groupId>org.ech</groupId>
 	<artifactId>phr</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.7</version>
 	<packaging>jar</packaging>
 	<name>phr</name>
 	<description>PHR-BOX</description>
@@ -12,18 +18,13 @@
 	<properties>
 		<docker.image.prefix>thinklaboy</docker.image.prefix>
 		<docker.maven.plugin.version>0.4.11</docker.maven.plugin.version>
-		<hbase.version>0.99.1</hbase.version>
-		<junit.version>4.12</junit.version>
-		<lombok.version>1.16.10</lombok.version>
-		<springboot.version>1.3.7.RELEASE</springboot.version>
-		<spring.version>4.2.7.RELEASE</spring.version>
+		<hbase.version>1.2.6</hbase.version>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
-
-		<start-class>org.ech.phr.Application</start-class>
+		<swagger.version>2.6.1</swagger.version>
 	</properties>
 
 	<dependencies>
@@ -31,6 +32,12 @@
 			<groupId>org.apache.hbase</groupId>
 			<artifactId>hbase-client</artifactId>
 			<version>${hbase.version}</version>
+			<exclusions>
+			    <exclusion>
+			    	<groupId>com.google.guava</groupId>
+			    	<artifactId>guava</artifactId>
+			    </exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.hbase</groupId>
@@ -41,34 +48,62 @@
 			<groupId>org.apache.hbase</groupId>
 			<artifactId>hbase-common</artifactId>
 			<version>${hbase.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.google.guava</groupId>
+					<artifactId>guava</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-			<version>${springboot.version}</version>
-		</dependency>
+			<exclusions>
+			    <exclusion>
+			      <groupId>org.springframework.boot</groupId>
+			      <artifactId>spring-boot-starter-logging</artifactId>
+			    </exclusion>
+			</exclusions>
+  		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
-			<version>${springboot.version}</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>${lombok.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
-			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>${junit.version}</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>io.springfox</groupId>
+		    <artifactId>springfox-swagger2</artifactId>
+			<version>${swagger.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.google.guava</groupId>
+					<artifactId>guava</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+		    <groupId>io.springfox</groupId>
+		    <artifactId>springfox-swagger-ui</artifactId>
+			<version>${swagger.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>16.0</version>
 		</dependency>
 	</dependencies>
 
@@ -78,7 +113,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>org.ech.phr.Application</mainClass>
+					<mainClass>org.ech.phr.PhrPocApplication</mainClass>
 					<layout>ZIP</layout>
 				</configuration>
 				<executions>
@@ -88,22 +123,6 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
-			<plugin>
-				<groupId>com.spotify</groupId>
-				<artifactId>docker-maven-plugin</artifactId>
-				<version>${docker.maven.plugin.version}</version>
-				<configuration>
-					<imageName>${docker.image.prefix}/${project.artifactId}</imageName>
-					<dockerDirectory>src/main/docker</dockerDirectory>
-					<resources>
-						<resource>
-							<targetPath>/</targetPath>
-							<directory>${project.build.directory}</directory>
-							<include>${project.build.finalName}.jar</include>
-						</resource>
-					</resources>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>

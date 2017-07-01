@@ -1,0 +1,1 @@
+docker build -t phr:1.0 .
