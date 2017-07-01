@@ -2,6 +2,8 @@ package org.ech.phr.hbase.table.generic;
 
 import java.util.List;
 
+import org.apache.hadoop.hbase.HColumnDescriptor;
+import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
 import org.ech.phr.hbase.dto.ValueProvider;
 import org.ech.phr.model.exception.BusinessException;
@@ -79,5 +81,12 @@ public class HbaseTable {
 	public void setTableNameHbase(TableName tableNameHbase) {
 		this.tableNameHbase = tableNameHbase;
 	}
+
+	public <T extends ValueProvider> HTableDescriptor getDescriptorForColumn(HbaseColumn<T> column) {
+		HTableDescriptor hTableDescriptor = new HTableDescriptor(getTableNameHbase()); 
+		hTableDescriptor.addFamily( new HColumnDescriptor("id"));
+		return hTableDescriptor;
+	}
+
 
 }

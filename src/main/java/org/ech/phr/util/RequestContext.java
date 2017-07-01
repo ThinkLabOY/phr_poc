@@ -5,6 +5,7 @@ import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.hbase.client.Connection;
 import org.ech.phr.model.exception.BusinessException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -13,11 +14,14 @@ import org.springframework.stereotype.Component;
 @Scope("request")
 public class RequestContext {
 
+	@Autowired
+	private HbaseConnectionService hbaseConnectionService;
+	
 	private Connection connection;
 
 	private void initConnection() throws BusinessException  {
 		if (connection == null) {
-			connection = HbaseUtil.getHbaseConnection();
+			connection = hbaseConnectionService.getHbaseConnection();
 		}
 	}
 	
