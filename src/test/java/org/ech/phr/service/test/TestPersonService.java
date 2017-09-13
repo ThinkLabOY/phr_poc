@@ -1,8 +1,9 @@
 package org.ech.phr.service.test;
 
 import lombok.extern.slf4j.Slf4j;
-import org.ech.phr.model.Person;
+
 import org.ech.phr.model.exception.BusinessException;
+import org.ech.phr.model.hbase.Person;
 import org.ech.phr.service.PersonService;
 import org.ech.phr.util.FhirUtil;
 import org.junit.Assert;

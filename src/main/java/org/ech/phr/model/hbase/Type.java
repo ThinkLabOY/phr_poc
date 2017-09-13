@@ -1,13 +1,16 @@
-package org.ech.phr.model;
+package org.ech.phr.model.hbase;
+
+import org.ech.phr.model.hbase.generic.JsonDto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.ech.phr.model.generic.JsonDto;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Type extends JsonDto {
 	
 	private String typeCode;

@@ -1,4 +1,4 @@
-package org.ech.phr.model.generic;
+package org.ech.phr.model.hbase.generic;
 
 import java.lang.reflect.InvocationTargetException;
 

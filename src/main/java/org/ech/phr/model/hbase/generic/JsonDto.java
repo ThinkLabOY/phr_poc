@@ -1,4 +1,4 @@
-package org.ech.phr.model.generic;
+package org.ech.phr.model.hbase.generic;
 
 import java.io.IOException;
 
@@ -11,7 +11,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@Slf4j
 public class JsonDto extends MapperDto {
 
 	private ObjectMapper mapper = new ObjectMapper();

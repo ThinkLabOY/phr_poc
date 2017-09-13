@@ -6,8 +6,8 @@ import org.apache.hadoop.hbase.HTableDescriptor;
 import org.ech.phr.hbase.table.generic.HbaseColumn;
 import org.ech.phr.hbase.table.generic.HbaseRecord;
 import org.ech.phr.hbase.table.generic.HbaseTable;
-import org.ech.phr.model.Organisation;
 import org.ech.phr.model.exception.BusinessException;
+import org.ech.phr.model.hbase.Organisation;
 
 public class OrganisationTable extends HbaseTable {
 	

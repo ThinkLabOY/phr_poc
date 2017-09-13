@@ -1,9 +1,9 @@
 package org.ech.phr.service.test;
 
-import org.ech.phr.model.Organisation;
-import org.ech.phr.model.Person;
-import org.ech.phr.model.Resource;
-import org.ech.phr.model.Type;
+import org.ech.phr.model.hbase.Organisation;
+import org.ech.phr.model.hbase.Person;
+import org.ech.phr.model.hbase.Resource;
+import org.ech.phr.model.hbase.Type;
 
 public class TestData {
 

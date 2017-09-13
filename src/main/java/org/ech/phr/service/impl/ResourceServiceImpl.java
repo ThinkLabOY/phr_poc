@@ -1,13 +1,16 @@
 package org.ech.phr.service.impl;
 
+import static org.ech.phr.model.fhir.ResourceTypeEnum.TYPE;
+import static org.ech.phr.model.fhir.ResourceTypeEnum.PATIENT;
+
 import java.util.List;
 
 import org.ech.phr.hbase.table.ResourceTable;
 import org.ech.phr.hbase.table.generic.HbaseRecord;
-import org.ech.phr.model.Person;
-import org.ech.phr.model.Resource;
-import org.ech.phr.model.Type;
 import org.ech.phr.model.exception.BusinessException;
+import org.ech.phr.model.hbase.Person;
+import org.ech.phr.model.hbase.Resource;
+import org.ech.phr.model.hbase.Type;
 import org.ech.phr.service.OrganisationService;
 import org.ech.phr.service.PersonService;
 import org.ech.phr.service.ResourceService;
@@ -30,9 +33,9 @@ public class ResourceServiceImpl implements ResourceService {
 		Resource resource = null;
 		Person person = personService.findOrInsertPerson(personId, personIdOid, organisationId, organisationIdOid);
 		if (person != null) {
-			String personPhrIdFull = FhirUtil.composeId(person.getPhrId(), person.getPhrIdOid(), FhirUtil.TYPE_PATIENT);
+			String personPhrIdFull = FhirUtil.composeId(person.getPhrId(), person.getPhrIdOid(), PATIENT.getText());
 			Type type = new Type(typeCode, typeCodeOid);
-			String typeIdFull = FhirUtil.composeId(typeCode, typeCodeOid, FhirUtil.TYPE_TYPE);
+			String typeIdFull = FhirUtil.composeId(typeCode, typeCodeOid, TYPE.getText());
 		    resource = new Resource(type, resourceId, resourceIdOid);
 			HbaseRecord<Resource> resourceRecord = ResourceTable.createIdRecord(typeIdFull, personPhrIdFull, resource);
 			resource = resourceRecord.put().getValue();
@@ -44,8 +47,8 @@ public class ResourceServiceImpl implements ResourceService {
 		List<Resource> result = null;
 		Person person = personService.findPerson(personId, personIdOid, organisationId, organisationIdOid);
 		if (person != null) {
-			String personPhrIdFull = FhirUtil.composeId(person.getPhrId(), person.getPhrIdOid(), FhirUtil.TYPE_PATIENT);
-			String typeIdFull = FhirUtil.composeId(typeCode, typeCodeOid, FhirUtil.TYPE_TYPE);
+			String personPhrIdFull = FhirUtil.composeId(person.getPhrId(), person.getPhrIdOid(), PATIENT.getText());
+			String typeIdFull = FhirUtil.composeId(typeCode, typeCodeOid, TYPE.getText());
 			HbaseRecord<Resource> resourceRecord = ResourceTable.createIdRecord(typeIdFull, personPhrIdFull);
 			result = resourceRecord.get().getValues();
 		}

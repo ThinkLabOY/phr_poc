@@ -13,7 +13,7 @@ import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.Table;
 import org.ech.phr.hbase.dto.ValueProvider;
 import org.ech.phr.model.exception.BusinessException;
-import org.ech.phr.model.generic.JsonDto;
+import org.ech.phr.model.hbase.generic.JsonDto;
 import org.ech.phr.util.RequestContext;
 import org.ech.phr.util.SpringUtil;
 

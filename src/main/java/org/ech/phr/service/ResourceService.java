@@ -2,8 +2,8 @@ package org.ech.phr.service;
 
 import java.util.List;
 
-import org.ech.phr.model.Resource;
 import org.ech.phr.model.exception.BusinessException;
+import org.ech.phr.model.hbase.Resource;
 
 public interface ResourceService {
 

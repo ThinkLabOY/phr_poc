@@ -1,30 +1,29 @@
-package org.ech.phr.model;
+package org.ech.phr.model.hbase;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.ech.phr.model.generic.JsonDto;
+
+import org.ech.phr.model.hbase.generic.JsonDto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Person extends JsonDto {
 
 	private String personId;
 	private String personIdOid;
-	@JsonIgnore
 	private String phrId;
-	@JsonIgnore
 	private String phrIdOid;
-	@JsonIgnore
 	private String masterId;
+	private String masterIdOid;	
+	
 	@JsonIgnore
-	private String masterIdOid;
-	
 	private Organisation organisation;
-	
 
 	public Person(String personId, String personIdOid) {
 		super();

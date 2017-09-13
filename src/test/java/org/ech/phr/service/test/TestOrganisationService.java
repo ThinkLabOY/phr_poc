@@ -1,7 +1,7 @@
 package org.ech.phr.service.test;
 
-import org.ech.phr.model.Organisation;
 import org.ech.phr.model.exception.BusinessException;
+import org.ech.phr.model.hbase.Organisation;
 import org.ech.phr.service.OrganisationService;
 import org.ech.phr.util.FhirUtil;
 import org.junit.Assert;

@@ -1,0 +1,11 @@
+logging:
+  level:
+    org.ech.phr: DEBUG
+    org.apache.zookeeper: trace
+
+server:
+  port: 8081
+  
+hbase:
+  zookeeper:
+    quorum: 127.0.0.1:2181
