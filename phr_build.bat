@@ -1,1 +1,1 @@
-mvn package -P docker
+mvn -Pdocker package

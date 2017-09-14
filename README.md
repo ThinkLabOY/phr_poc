@@ -16,35 +16,76 @@ Run batches in the following order:
 7. create_data_structure.bat
 
 # Testing environment:
-Open swagger Ui for REST:
+Open swagger Ui for documented REST api:
 http://localhost:8081/swagger-ui.html
 
-1. Registering organisation:
-	1. 
-http://localhost:8081/swagger-ui.html#!/organisation-controller/saveOrganisationUsingPOST
-{
-  "id": "ORG1",
-  "url": "localhost:8082"
-}
-	2.
-    http://localhost:8081/fhir/Organisation?organisation.identifier.value=ORG1
-Should return:
-    {"id":"ORG1","url":"localhost:8082"}
-
-2. Registering person:
-	1.
-http://localhost:8081/swagger-ui.html#!/person-controller/savePersonUsingPOST
+1. Registering endpoint managed by organisation:
+   1. Register endpoint managed by organization
+    http://localhost:8081/swagger-ui.html#!/endpoint-controller/saveEndpointUsingPOST
     {
-        "organisation": {
-        "id": "ORG1"
+      "resourceType": "Endpoint",
+      "managingOrganization": {
+        "reference": "Organization/ORG1"
       },
-      "personId": "1",
-      "personIdOid": "OID1"
+      "address": "http://org1.org/fhir"
     }
-	2.
-    http://localhost:8081/fhir/Person?patient.identifier.value=1&patient.identifier.system=OID1&organisation.identifier.value=ORG1
-Should return:
-    {"personId":"1","personIdOid":"OID1","organisation":null}
-
+   2. Query registered endpoints managed by organization
+    http://localhost:8081/swagger-ui.html#!/endpoint-controller/findEndpointUsingGET
+    managingOrganization: ORG1
+    Should return:
+    {
+      "resourceType": "Endpoint",
+      "managingOrganization": {
+        "reference": "Organization/ORG1"
+      },
+      "address": "http://org1.org/fhir"
+    }
+2. Registering patient:
+   1. Register patient managed by organization
+   http://localhost:8081/swagger-ui.html#!/patient-controller/savePatientUsingPOST
+    {
+      "resourceType": "Patient",
+      "identifier": [
+        {
+          "system": "http://www.politsei.ee/",
+          "use": "usual",
+          "value": "37804230234"
+        }
+      ],
+      "managingOrganization": {
+        "reference": "Organization/ORG1"
+      }
+    }
+   2. Query registered patient(s) (managed by organization)
+    http://localhost:8081/swagger-ui.html#!/patient-controller/findPatientUsingGET
+	id: 37804230234
+	patient.identifier.system: http://www.politsei.ee/
+    Should return:
+    [
+      {
+        "resourceType": "Patient",
+        "identifier": [
+          {
+            "use": "usual",
+            "system": "http://www.politsei.ee/",
+            "value": "37804230234"
+          }
+        ],
+        "managingOrganization": {
+          "reference": "Organization/ORG1"
+        }
+      }
+    ]
 3. Performing Observation query:
-    http://localhost:8081/fhir/Observation?patient.identifier.value=1&patient.identifier.system=OID1&organisation.identifier.value=ORG1&code.code=3141-9&code.system=http%3A%2F%2Floinc.org
+    http://localhost:8081/swagger-ui.html#!/observation-controller/getObservationsUsingGET
+	patient.identifier.value: 37804230234
+	patient.identifier.system: http://www.politsei.ee/
+	organisation.identifier.value: ORG1
+	code.code: 8302-2
+	code.system: http://loinc.org
+
+	Will perform subqueries:
+	http://org1.org/fhir/Observation?patient.identifier.value=37804230234&patient.identifier.system=http://www.politsei.ee/&organisation.identifier.value=ORG1&code.code=8302-2&code.system=http://loinc.org
+	for each organization managing specified user data (using the registered endpoint for the organization).
+	Results from different organizations are combined and returned.
+
