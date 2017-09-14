@@ -21,7 +21,8 @@ http://localhost:8081/swagger-ui.html
 
 1. Registering endpoint managed by organisation:
    1. Register endpoint managed by organization
-    http://localhost:8081/swagger-ui.html#!/endpoint-controller/saveEndpointUsingPOST
+    `http://localhost:8081/swagger-ui.html#!/endpoint-controller/saveEndpointUsingPOST`
+```json
     {
       "resourceType": "Endpoint",
       "managingOrganization": {
@@ -29,10 +30,12 @@ http://localhost:8081/swagger-ui.html
       },
       "address": "http://org1.org/fhir"
     }
+```
    2. Query registered endpoints managed by organization
-    http://localhost:8081/swagger-ui.html#!/endpoint-controller/findEndpointUsingGET
+    `http://localhost:8081/swagger-ui.html#!/endpoint-controller/findEndpointUsingGET`
     managingOrganization: ORG1
     Should return:
+```json
     {
       "resourceType": "Endpoint",
       "managingOrganization": {
@@ -40,6 +43,7 @@ http://localhost:8081/swagger-ui.html
       },
       "address": "http://org1.org/fhir"
     }
+```
 2. Registering patient:
    1. Register patient managed by organization
    http://localhost:8081/swagger-ui.html#!/patient-controller/savePatientUsingPOST
