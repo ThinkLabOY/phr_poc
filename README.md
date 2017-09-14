@@ -35,7 +35,7 @@ Open swagger Ui for documented REST api:
     `http://localhost:8081/swagger-ui.html#!/endpoint-controller/findEndpointUsingGET`  
     managingOrganization: ORG1  
   
-	**Should return:**  
+	Should return:  
 ```json
     {
       "resourceType": "Endpoint",
@@ -68,7 +68,7 @@ Open swagger Ui for documented REST api:
 	id: 37804230234  
 	patient.identifier.system: http://www.politsei.ee/  
   
-	**Should return:**  
+	Should return:  
 ```json
     [
       {
@@ -94,7 +94,7 @@ Open swagger Ui for documented REST api:
 	code.code: 8302-2  
 	code.system: http://loinc.org  
   
-	**Will perform subqueries:**  
+	Will perform subqueries:  
 	`http://org1.org/fhir/Observation?patient.identifier.value=37804230234&patient.identifier.system=http://www.politsei.ee/&organisation.identifier.value=ORG1&code.code=8302-2&code.system=http://loinc.org`  
 	for each organization managing specified user data (using the registered endpoint for the organization).  
 	Results from different organizations are combined and returned.  
