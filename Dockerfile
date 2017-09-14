@@ -19,5 +19,5 @@ EXPOSE 8081
 
 RUN mkdir /phr
 WORKDIR /phr
-ADD ./target/phr-0.0.8.jar /phr/phr-0.0.8.jar
-ENTRYPOINT java -jar phr-0.0.8.jar
+ADD ./target/phr-0.0.10.jar /phr/phr-0.0.10.jar
+ENTRYPOINT java -jar phr-0.0.10.jar

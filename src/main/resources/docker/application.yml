@@ -4,6 +4,12 @@ logging:
 
 server:
   port: 8081
+
+tomcat:
+  ajp:
+    port: 8009
+    remoteauthentication: false
+    enabled: true
   
 hbase:
   zookeeper:

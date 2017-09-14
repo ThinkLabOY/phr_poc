@@ -28,7 +28,7 @@
 		<dependency>
 			<groupId>org.ech</groupId>
 			<artifactId>phr</artifactId>
-			<version>0.0.8</version>
+			<version>0.0.10</version>
 		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>

@@ -1,1 +1,1 @@
-docker run --name phr --network phr_ntwrk --ip 172.30.0.11 --rm -p 8081:8081 phr:1.0
+docker run -t -i --restart always --name phr --network phr_ntwrk --ip 172.30.0.11 -p 8081:8081 -p 8009:8009 phr:1.1

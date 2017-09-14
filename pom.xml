@@ -11,7 +11,7 @@
 
 	<groupId>org.ech</groupId>
 	<artifactId>phr</artifactId>
-	<version>0.0.8</version>
+	<version>0.0.10</version>
 	<packaging>jar</packaging>
 	<name>phr</name>
 	<description>PHR-BOX</description>
