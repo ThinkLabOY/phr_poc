@@ -35,7 +35,7 @@ Open swagger Ui for documented REST api:
     `http://localhost:8081/swagger-ui.html#!/endpoint-controller/findEndpointUsingGET`  
     managingOrganization: ORG1  
   
-    **Should return:**  
+	**Should return:**  
 ```json
     {
       "resourceType": "Endpoint",
@@ -68,7 +68,7 @@ Open swagger Ui for documented REST api:
 	id: 37804230234  
 	patient.identifier.system: http://www.politsei.ee/  
   
-    **Should return:**  
+	**Should return:**  
 ```json
     [
       {
