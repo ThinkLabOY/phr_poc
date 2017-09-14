@@ -16,12 +16,12 @@ Run batches in the following order:
 7. create_data_structure.bat
 
 # Testing environment:
-Open swagger Ui for documented REST api:
-http://localhost:8081/swagger-ui.html
+Open swagger Ui for documented REST api:  
+`http://localhost:8081/swagger-ui.html`  
 
-1. Registering endpoint managed by organisation:
-   1. Register endpoint managed by organization
-    `http://localhost:8081/swagger-ui.html#!/endpoint-controller/saveEndpointUsingPOST`
+1. Registering endpoint managed by organisation:  
+   1. Register endpoint managed by organization  
+    `http://localhost:8081/swagger-ui.html#!/endpoint-controller/saveEndpointUsingPOST`  
 ```json
     {
       "resourceType": "Endpoint",
@@ -31,10 +31,10 @@ http://localhost:8081/swagger-ui.html
       "address": "http://org1.org/fhir"
     }
 ```
-   2. Query registered endpoints managed by organization
-    `http://localhost:8081/swagger-ui.html#!/endpoint-controller/findEndpointUsingGET`
-    managingOrganization: ORG1
-    Should return:
+   2. Query registered endpoints managed by organization  
+    `http://localhost:8081/swagger-ui.html#!/endpoint-controller/findEndpointUsingGET`  
+    managingOrganization: ORG1  
+    Should return:  
 ```json
     {
       "resourceType": "Endpoint",
@@ -44,9 +44,10 @@ http://localhost:8081/swagger-ui.html
       "address": "http://org1.org/fhir"
     }
 ```
-2. Registering patient:
-   1. Register patient managed by organization
-   http://localhost:8081/swagger-ui.html#!/patient-controller/savePatientUsingPOST
+2. Registering patient:  
+   1. Register patient managed by organization  
+   `http://localhost:8081/swagger-ui.html#!/patient-controller/savePatientUsingPOST`  
+```json
     {
       "resourceType": "Patient",
       "identifier": [
@@ -60,11 +61,13 @@ http://localhost:8081/swagger-ui.html
         "reference": "Organization/ORG1"
       }
     }
-   2. Query registered patient(s) (managed by organization)
-    http://localhost:8081/swagger-ui.html#!/patient-controller/findPatientUsingGET
+```
+   2. Query registered patient(s) (managed by organization)  
+    `http://localhost:8081/swagger-ui.html#!/patient-controller/findPatientUsingGET`  
 	id: 37804230234
 	patient.identifier.system: http://www.politsei.ee/
     Should return:
+```json
     [
       {
         "resourceType": "Patient",
@@ -80,16 +83,17 @@ http://localhost:8081/swagger-ui.html
         }
       }
     ]
-3. Performing Observation query:
-    http://localhost:8081/swagger-ui.html#!/observation-controller/getObservationsUsingGET
-	patient.identifier.value: 37804230234
-	patient.identifier.system: http://www.politsei.ee/
-	organisation.identifier.value: ORG1
-	code.code: 8302-2
-	code.system: http://loinc.org
-
-	Will perform subqueries:
-	http://org1.org/fhir/Observation?patient.identifier.value=37804230234&patient.identifier.system=http://www.politsei.ee/&organisation.identifier.value=ORG1&code.code=8302-2&code.system=http://loinc.org
-	for each organization managing specified user data (using the registered endpoint for the organization).
-	Results from different organizations are combined and returned.
+```
+3. Performing Observation query:  
+    `http://localhost:8081/swagger-ui.html#!/observation-controller/getObservationsUsingGET`  
+	patient.identifier.value: 37804230234  
+	patient.identifier.system: http://www.politsei.ee/  
+	organisation.identifier.value: ORG1  
+	code.code: 8302-2  
+	code.system: http://loinc.org  
+  
+	Will perform subqueries:  
+	`http://org1.org/fhir/Observation?patient.identifier.value=37804230234&patient.identifier.system=http://www.politsei.ee/&organisation.identifier.value=ORG1&code.code=8302-2&code.system=http://loinc.org`  
+	for each organization managing specified user data (using the registered endpoint for the organization).  
+	Results from different organizations are combined and returned.  
 
