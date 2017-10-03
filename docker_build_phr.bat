@@ -1,1 +1,1 @@
-docker build -t phr:1.1 .
+docker build --build-arg version_tag="0.0.12" -t phr:1.3 .

@@ -1,6 +1,7 @@
 package org.ech.phr.hbase.table.generic;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -10,6 +11,8 @@ import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.client.ResultScanner;
+import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
 import org.ech.phr.hbase.dto.ValueProvider;
 import org.ech.phr.model.exception.BusinessException;
@@ -132,30 +135,23 @@ public class HbaseRecord <V extends ValueProvider> {
 		Table tableHbase = null;
 		try {
 			tableHbase = connection.getTable(this.getTable().getTableNameHbase());
-			Get get = new Get(getRowId());
-			if (getColumnQualifier() != null) {
-				get.addColumn(getColumn().getColumnNameValue(), getColumnQualifier());
+			Class<V> valueClass = getColumn().getType();
+			if (getRowId() != null) {
+				Get get = new Get(getRowId());
+				if (getColumnQualifier() != null) {
+					get.addColumn(getColumn().getColumnNameValue(), getColumnQualifier());
+				}
+				else {
+					get.addFamily(getColumn().getColumnNameValue());
+				}
+				Result result = tableHbase.get(get);
+				mapResultsToValueObjects(valueClass, result);
 			}
 			else {
-				get.addFamily(getColumn().getColumnNameValue());
-				
-			}
-			Result result = tableHbase.get(get);
-			List<Cell> resultCells = result.listCells();
-			if (resultCells != null) {
-				Class<V> valueClass = getColumn().getType();
-				values = new LinkedList<V>();
-				for (Cell cell : resultCells) {
-					byte[] columnQualifierBytes = CellUtil.cloneQualifier(cell);
-					byte[] valueBytes = CellUtil.cloneValue(cell);
-					V valueObject = JsonDto.create(valueBytes, valueClass);
-					if (columnQualifierBytes != null && columnQualifierBytes.length > 0) {
-						valueObject.setColumnQualifierBytes(columnQualifierBytes);
-					}
-					values.add(valueObject);
-					if (this.value == null) {
-						this.value = valueObject;
-					}
+				ResultScanner resultScanner = tableHbase.getScanner(getColumn().getColumnNameValue());
+				Iterator<Result> resultList = resultScanner.iterator();
+				while (resultList.hasNext()) {
+					mapResultsToValueObjects(valueClass, resultList.next());
 				}
 			}
 		}
@@ -173,5 +169,39 @@ public class HbaseRecord <V extends ValueProvider> {
 			}
 		}
 		return this;
+	}
+
+	private void mapResultsToValueObjects(Class<V> valueClass, Result result) throws BusinessException {
+		List<Cell> resultCells = result.listCells();
+		if (resultCells != null) {
+			for (Cell cell : resultCells) {
+				V valueObject = mapCellToValueObject(valueClass, cell);
+				addToValuesList(valueObject);
+				setAsValue(valueObject);
+			}
+		}
+	}
+
+	private void setAsValue(V valueObject) {
+		if (this.value == null) {
+			this.value = valueObject;
+		}
+	}
+
+	private void addToValuesList(V valueObject) {
+		if (values == null) {
+			values = new LinkedList<V>();
+		}
+		values.add(valueObject);
+	}
+	
+	private V mapCellToValueObject(Class<V> valueClass, Cell cell) throws BusinessException {
+		byte[] columnQualifierBytes = CellUtil.cloneQualifier(cell);
+		byte[] valueBytes = CellUtil.cloneValue(cell);
+		V valueObject = JsonDto.create(valueBytes, valueClass);
+		if (columnQualifierBytes != null && columnQualifierBytes.length > 0) {
+			valueObject.setColumnQualifierBytes(columnQualifierBytes);
+		}
+		return valueObject;
 	}
 }

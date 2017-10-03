@@ -10,4 +10,6 @@ public class ParameterConstants {
 	public static final String PATIENT_IDENTIFIER_VALUE = "patient.identifier.value";
 	public static final String MANAGING_ORGANIZATION = "managingOrganization";
 	
+	
+	public static final String HTTP_HEADER_LOCATION = "Location";
 }

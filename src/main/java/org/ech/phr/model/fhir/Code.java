@@ -18,5 +18,6 @@ import lombok.NoArgsConstructor;
 public class Code {
 
     public List<Coding> coding;
+    public String text;
 
 }

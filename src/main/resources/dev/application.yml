@@ -5,6 +5,7 @@ logging:
 
 server:
   port: 8081
+  contextPath: /phr
 
 tomcat:
   ajp:

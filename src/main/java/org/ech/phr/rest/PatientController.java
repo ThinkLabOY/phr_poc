@@ -9,8 +9,12 @@ import static org.ech.phr.util.FhirUtil.DELIMITER;
 import static org.ech.phr.util.FhirUtil.OID_PHR;
 
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.function.Supplier;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
@@ -20,6 +24,7 @@ import org.ech.phr.model.exception.BusinessException;
 import org.ech.phr.model.fhir.Identifier;
 import org.ech.phr.model.fhir.Patient;
 import org.ech.phr.model.fhir.Reference;
+import org.ech.phr.model.fhir.ResourceTypeEnum;
 import org.ech.phr.model.hbase.Organisation;
 import org.ech.phr.model.hbase.Person;
 import org.ech.phr.service.PersonService;
@@ -56,12 +61,12 @@ public class PatientController {
 	@RequestMapping(method = RequestMethod.GET, value = "/{" + ID + "}")
 	public List<Patient> findPatient(
 			@PathVariable(ID) @NotNull String id, 
-			@RequestParam(PATIENT_IDENTIFIER_SYSTEM) @NotNull String oid, 
-			@RequestParam(name=ORGANISATION_IDENTIFIER_VALUE, required= false) String organisationId) throws BusinessException {
+			@RequestParam(value = PATIENT_IDENTIFIER_SYSTEM, required = false, defaultValue = OID_PHR) String oid, 
+			@RequestParam(value=ORGANISATION_IDENTIFIER_VALUE, required= false) String organisationId) throws BusinessException {
 		List<Patient> patientList = null;
 		try {
 			if (StringUtils.isNotBlank(organisationId)) {
-				Person person = personService.findPerson(id, oid, organisationId, FhirUtil.OID_PHR);
+				Person person = personService.findPerson(id, oid, organisationId, OID_PHR);
 				if (person != null) {
 					patientList = new ArrayList<>();
 					patientList.add(mapPatientFromPerson(person, organisationId));
@@ -88,7 +93,21 @@ public class PatientController {
 
 	@ApiOperation("Registered patient managed by organization")
 	@RequestMapping(method = RequestMethod.POST)
-	public Patient savePatient(@ApiParam(required = true, value = EXAMPLE) @RequestBody @Valid Patient patient) throws BusinessException {
+	public Patient savePatient(@ApiParam(required = true, value = EXAMPLE) @RequestBody @Valid Patient patient, HttpServletRequest request, HttpServletResponse response) throws BusinessException {
+		log.debug(" 1." + request.getLocalAddr());
+		log.debug(" 2." + request.getPathInfo());
+		log.debug(" 3." + request.getPathTranslated());
+		log.debug(" 4." + request.getRequestURI());
+		log.debug(" 5." + request.getServerName());
+		log.debug(" 6." + request.getServletPath());
+		log.debug(" 7." + request.getContextPath());
+		Enumeration<String> enumer = request.getHeaderNames();
+		while (enumer.hasMoreElements()) {
+			String header = enumer.nextElement();
+			log.debug(" 8." + header + ": " + request.getHeader(header));
+		}
+		
+		log.debug(" 8." + request.getRequestURL());
 		Patient resultPatient = null;
 		try {
 			Person person = mapPersonFromPatient(patient);
@@ -97,12 +116,19 @@ public class PatientController {
 					person.getPersonIdOid(), organizationId, OID_PHR);
 			resourceService.putResourceReference(person.getPersonId(), person.getPersonIdOid(), organizationId, OID_PHR, PATIENT.getText(), OID_PHR, person.getPhrId(), person.getPhrIdOid());
 			resultPatient = mapPatientFromPerson(person, organizationId);
+			Identifier identifier = resultPatient.getIdentifier(OID_PHR).orElseThrow(() -> BusinessException.EX_TCH_001);
+			addLocationPath(PATIENT, identifier, request, response);
 		}
 		catch (BusinessException e) {
 			log.error("error: " + e.getMessage());
 			throw e;
 		}
 		return resultPatient;
+	}
+
+	private void addLocationPath(ResourceTypeEnum resource, Identifier identifier, HttpServletRequest request, HttpServletResponse response) {
+		String serverPath = request.getRequestURL().toString();
+		response.setHeader(ParameterConstants.HTTP_HEADER_LOCATION, serverPath + FhirUtil.createLocationPath(resource, identifier, PATIENT_IDENTIFIER_SYSTEM));
 	}
 
 	private Patient mapPatientFromPerson(Person person) {
@@ -120,15 +146,20 @@ public class PatientController {
 				.value(person.getPersonId())
 				.use("usual")
 				.build();
+		Identifier identifierPhr = Identifier.builder()
+				.system(person.getPhrIdOid())
+				.value(person.getPhrId())
+				.use("usual")
+				.build();
 		Reference managingOrganization = null;
 		if (organizationId != null) {
 			managingOrganization = Reference.builder()
-					.reference(ORGANIZATION.getText() + DELIMITER + organizationId)
+					.reference(FhirUtil.createReference(ORGANIZATION, organizationId))
 					.build();
 		}
 		Patient patient = Patient.builder()
 				.resourceType(PATIENT.getText())
-				.identifier(ImmutableList.of(identifier))
+				.identifier(ImmutableList.of(identifier, identifierPhr))
 				.managingOrganization(managingOrganization)
 				.build();
 		return patient;

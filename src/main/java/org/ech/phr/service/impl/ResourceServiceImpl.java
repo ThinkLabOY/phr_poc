@@ -33,9 +33,9 @@ public class ResourceServiceImpl implements ResourceService {
 		Resource resource = null;
 		Person person = personService.findOrInsertPerson(personId, personIdOid, organisationId, organisationIdOid);
 		if (person != null) {
-			String personPhrIdFull = FhirUtil.composeId(person.getPhrId(), person.getPhrIdOid(), PATIENT.getText());
+			String personPhrIdFull = FhirUtil.composeId(person.getPhrId(), person.getPhrIdOid(), PATIENT);
 			Type type = new Type(typeCode, typeCodeOid);
-			String typeIdFull = FhirUtil.composeId(typeCode, typeCodeOid, TYPE.getText());
+			String typeIdFull = FhirUtil.composeId(typeCode, typeCodeOid, TYPE);
 		    resource = new Resource(type, resourceId, resourceIdOid);
 			HbaseRecord<Resource> resourceRecord = ResourceTable.createIdRecord(typeIdFull, personPhrIdFull, resource);
 			resource = resourceRecord.put().getValue();
@@ -47,8 +47,8 @@ public class ResourceServiceImpl implements ResourceService {
 		List<Resource> result = null;
 		Person person = personService.findPerson(personId, personIdOid, organisationId, organisationIdOid);
 		if (person != null) {
-			String personPhrIdFull = FhirUtil.composeId(person.getPhrId(), person.getPhrIdOid(), PATIENT.getText());
-			String typeIdFull = FhirUtil.composeId(typeCode, typeCodeOid, TYPE.getText());
+			String personPhrIdFull = FhirUtil.composeId(person.getPhrId(), person.getPhrIdOid(), PATIENT);
+			String typeIdFull = FhirUtil.composeId(typeCode, typeCodeOid, TYPE);
 			HbaseRecord<Resource> resourceRecord = ResourceTable.createIdRecord(typeIdFull, personPhrIdFull);
 			result = resourceRecord.get().getValues();
 		}

@@ -1,5 +1,6 @@
 FROM centos:7.3.1611
 
+ARG version_tag
 RUN yum -y install wget glibc
 
 RUN mkdir /jdk_home
@@ -19,5 +20,5 @@ EXPOSE 8081
 
 RUN mkdir /phr
 WORKDIR /phr
-ADD ./target/phr-0.0.10.jar /phr/phr-0.0.10.jar
-ENTRYPOINT java -jar phr-0.0.10.jar
+ADD ./target/phr-0.0.12.jar /phr/phr-0.0.12.jar
+ENTRYPOINT java -jar phr-0.0.12.jar

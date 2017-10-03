@@ -2,6 +2,7 @@ package org.ech.phr.service.impl;
 
 import static org.ech.phr.model.fhir.ResourceTypeEnum.ORGANIZATION;
 import static org.ech.phr.model.fhir.ResourceTypeEnum.PATIENT;
+import static org.ech.phr.util.FhirUtil.composeId;
 
 import java.util.List;
 
@@ -39,8 +40,8 @@ public class PersonServiceImpl implements PersonService {
 		Person person = null;
 		Organisation organisation = organisationService.getOrganisationById(organisationId, organisationIdOid);
 		if (organisation != null) {
-			String organisationPhrIdFull = FhirUtil.composeId(organisation.getPhrId(), organisation.getPhrIdOid(), ORGANIZATION.getText());
-			String personIdFull = FhirUtil.composeId(id, idOid, PATIENT.getText());
+			String organisationPhrIdFull = composeId(organisation.getPhrId(), organisation.getPhrIdOid(), ORGANIZATION);
+			String personIdFull = composeId(id, idOid, PATIENT);
 			HbaseRecord<Person> findPersonRecord = PersonTable.createIdRecord(organisationPhrIdFull, personIdFull);
 			person = findPersonRecord.get().getValue();
 			if (person == null && createNewIfNotFound) {
@@ -49,16 +50,16 @@ public class PersonServiceImpl implements PersonService {
 						.personId(id)
 						.personIdOid(idOid)
 						.phrId(phrId)
-						.phrIdOid(FhirUtil.OID_PHR_INTERNAL)
+						.phrIdOid(FhirUtil.OID_PHR)
 						.masterId(phrId)
 						.masterIdOid(FhirUtil.OID_MASTER)
 						.organisation(organisation)
 						.build();
 				HbaseRecord<Person> personRecord = PersonTable.createIdRecord(organisationPhrIdFull, personIdFull, person);
-				String personIdPhrFull = FhirUtil.composeId(person.getPhrId(), person.getPhrIdOid(), PATIENT.getText());
-				HbaseRecord<Person> personHashRecord = PersonTable.createIdRecord(organisationPhrIdFull, personIdPhrFull, person);
-				personHashRecord.put();
-				String personMasterIdPhrFull = FhirUtil.composeId(person.getMasterId(), person.getMasterIdOid(), PATIENT.getText());
+				String personIdPhrFull = composeId(person.getPhrId(), person.getPhrIdOid(), PATIENT);
+				HbaseRecord<Person> personPhrRecord = PersonTable.createIdRecord(organisationPhrIdFull, personIdPhrFull, person);
+				personPhrRecord.put();
+				String personMasterIdPhrFull = composeId(person.getMasterId(), person.getMasterIdOid(), PATIENT);
 				HbaseRecord<Person> personMasterRecord = PersonTable.createIdRecord(organisationPhrIdFull, personMasterIdPhrFull, person);
 				personMasterRecord.put();
 				person = personRecord.put().getValue();
@@ -72,7 +73,7 @@ public class PersonServiceImpl implements PersonService {
 
 	@Override
 	public List<Person> findPerson(String id, String idOid) throws BusinessException {
-		String personIdFull = FhirUtil.composeId(id, idOid, PATIENT.getText());
+		String personIdFull = FhirUtil.composeId(id, idOid, PATIENT);
 		HbaseRecord<Person> findPersonRecord = PersonTable.createIdRecord(null, personIdFull);
 		List<Person> personList = findPersonRecord.get().getValues();
 		if (CollectionUtils.isNotEmpty(personList)) {

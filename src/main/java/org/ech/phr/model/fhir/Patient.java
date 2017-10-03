@@ -2,6 +2,7 @@
 package org.ech.phr.model.fhir;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -39,4 +40,8 @@ public class Patient implements HasManagingOrganization {
     	return firstIdentifier;
     }
 
+    @JsonIgnore
+    public Optional<Identifier> getIdentifier(String system) {
+    	return identifier.stream().filter(identifier -> system.equals(identifier.getSystem())).findFirst();
+    }
 }

@@ -1,1 +1,1 @@
-mvn -Pdocker package
+mvn -Pdocker clean package
