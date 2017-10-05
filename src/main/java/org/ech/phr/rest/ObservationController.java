@@ -8,7 +8,6 @@ import static org.ech.phr.rest.ParameterConstants.PATIENT_IDENTIFIER_VALUE;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -111,27 +110,38 @@ public class ObservationController {
 		try {
 			log.info("Querying: \"" + targetUrl.toString() + "\".");
 			ResponseEntity<String> response = restTemplate.exchange(targetUrl, HttpMethod.GET, null, String.class);
-			JsonNode jsonNode = objectMapper.readTree(response.getBody());
-			subNodes = Lists.newArrayList(jsonNode.elements());
+			if (response != null && response.getBody() != null) {
+				JsonNode jsonNode = objectMapper.readTree(response.getBody());
+				subNodes = Lists.newArrayList(jsonNode.elements());
+			}
+			else {
+				String errorMessage = "INFO - Empty reponse from: \"" + targetUrl.toString() + "\".";
+				subNodes = addWarningCode(errorMessage, "CMNCTN-004");
+			}
 		} 
+		catch (JsonProcessingException e) {
+			String errorMessage = "JsonProcessingException accessing: \"" + targetUrl.toString() + "\": " + e.getMessage() + ".";
+			subNodes = addWarningCode(errorMessage, "CMNCTN-003");
+		}
 		catch (HttpClientErrorException e) {
 			String errorMessage = "HttpClientErrorException accessing: \"" + targetUrl.toString() + "\": " + e.getMessage() + ".";
-			Code error = Code.builder()
-					.text(errorMessage)
-					.coding(ImmutableList.of(Coding.builder().code("CMNCTN-001").system(FhirUtil.OID_PHR).build()))
-					.build();
-			subNodes = ImmutableList.of(objectMapper.valueToTree(error));
-			log.warn(errorMessage);
+			subNodes = addWarningCode(errorMessage, "CMNCTN-001");
 		}
 		catch (IOException e) {
 			String errorMessage = "IOExcpetion accessing: \"" + targetUrl.toString() + "\": " + e.getMessage() + ".";
-			Code error = Code.builder()
-					.text(errorMessage)
-					.coding(ImmutableList.of(Coding.builder().code("CMNCTN-002").system(FhirUtil.OID_PHR).build()))
-					.build();
-			subNodes = ImmutableList.of(objectMapper.valueToTree(error));
-			log.warn(errorMessage);
+			subNodes = addWarningCode(errorMessage, "CMNCTN-002");
 		}
+		return subNodes;
+	}
+
+	private List<JsonNode> addWarningCode(String errorMessage, String errorCode) {
+		List<JsonNode> subNodes;
+		Code error = Code.builder()
+				.text(errorMessage)
+				.coding(ImmutableList.of(Coding.builder().code(errorCode).system(FhirUtil.OID_PHR).build()))
+				.build();
+		subNodes = ImmutableList.of(objectMapper.valueToTree(error));
+		log.warn(errorMessage);
 		return subNodes;
 	}
 

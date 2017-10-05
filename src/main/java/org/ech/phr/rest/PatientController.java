@@ -94,20 +94,6 @@ public class PatientController {
 	@ApiOperation("Registered patient managed by organization")
 	@RequestMapping(method = RequestMethod.POST)
 	public Patient savePatient(@ApiParam(required = true, value = EXAMPLE) @RequestBody @Valid Patient patient, HttpServletRequest request, HttpServletResponse response) throws BusinessException {
-		log.debug(" 1." + request.getLocalAddr());
-		log.debug(" 2." + request.getPathInfo());
-		log.debug(" 3." + request.getPathTranslated());
-		log.debug(" 4." + request.getRequestURI());
-		log.debug(" 5." + request.getServerName());
-		log.debug(" 6." + request.getServletPath());
-		log.debug(" 7." + request.getContextPath());
-		Enumeration<String> enumer = request.getHeaderNames();
-		while (enumer.hasMoreElements()) {
-			String header = enumer.nextElement();
-			log.debug(" 8." + header + ": " + request.getHeader(header));
-		}
-		
-		log.debug(" 8." + request.getRequestURL());
 		Patient resultPatient = null;
 		try {
 			Person person = mapPersonFromPatient(patient);
